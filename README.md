@@ -21,19 +21,13 @@
 ## 安装
 
 ```ts
-pnpm
-install
-@giszhc/
-generate - route - vue
+pnpm install @giszhc/generate-route-vue
 ```
 
 或
 
 ```ts
-npm
-install
-@giszhc/
-generate - route - vue
+npm install @giszhc/generate-route-vue
 ```
 
 ------
