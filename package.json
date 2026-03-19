@@ -30,13 +30,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   },
   "dependencies": {
-    "@giszhc/encryption-utils": "0.0.3",
-    "js-cookie": "^3.0.5",
     "vue-router": "^5.0.2"
   }
 }

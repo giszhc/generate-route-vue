@@ -1,7 +1,7 @@
 # @giszhc/generate-route-vue
 
 一个 **基于文件系统的 Vue Router 动态路由生成工具**，
- 用于根据约定的目录结构自动生成 `vue-router` 路由配置。
+用于根据约定的目录结构自动生成 `vue-router` 路由配置。
 
 适用于 **Vite + Vue 3 + Vue Router 4** 项目，减少手写路由表的维护成本。
 
@@ -21,13 +21,19 @@
 ## 安装
 
 ```ts
-pnpm install @giszhc/generate-route-vue
+pnpm
+install
+@giszhc/
+generate - route - vue
 ```
 
 或
 
 ```ts
-npm install @giszhc/generate-route-vue
+npm
+install
+@giszhc/
+generate - route - vue
 ```
 
 ------
@@ -40,14 +46,14 @@ npm install @giszhc/generate-route-vue
 
 ------
 
-## 页面结构约定
+## 页面结构约定(推荐)
 
 ```ts
-src/views/
-├─ HomeView/
+src / views /
+├─ HomeView /
 │  ├─ HomeView.vue
 │  └─ page.ts
-├─ UserView/
+├─ UserView /
 │  ├─ UserView.vue
 │  └─ page.ts
 ```
@@ -58,8 +64,8 @@ src/views/
 
 ```ts
 export default {
-  title: "首页",
-  redirect: { name: "home" }
+    title: "首页",
+    redirect: {name: "home"}
 };
 ```
 
@@ -82,22 +88,22 @@ function generateRoute(options: IOption): RouteRecordRaw[];
 ### IOption 参数说明
 
 ```ts
-import type { RouteRecordRedirectOption } from "vue-router";
+import type {RouteRecordRedirectOption} from "vue-router";
 
 interface IOption {
-  pages: Record<string, unknown>;
-  modules: Record<string, () => Promise<unknown>>;
-  treeMode?: boolean;
-  defaultRedirect: RouteRecordRedirectOption;
+    pages: Record<string, unknown>;
+    modules: Record<string, () => Promise<unknown>>;
+    treeMode?: boolean;
+    defaultRedirect: RouteRecordRedirectOption;
 }
 ```
 
-| 参数            | 类型                                   | 必填 | 说明               |
-| --------------- | -------------------------------------- | ---- | ------------------ |
-| pages           | Record<string, unknown>                | ✅    | `page.ts` 模块集合 |
-| modules         | Record<string, () => Promise<unknown>> | ✅    | 页面组件模块集合   |
-| treeMode        | boolean                                | ❌    | 是否生成树形路由   |
-| defaultRedirect | RouteRecordRedirectOption              | ✅    | 根路径默认重定向   |
+| 参数              | 类型                                     | 必填 | 说明       |
+|-----------------|----------------------------------------|----|----------|
+| pages           | Record<string, unknown>                | ✅  | `page.ts |page.js` 模块集合 |
+| modules         | Record<string, () => Promise<unknown>> | ✅  | 页面组件模块集合 |
+| treeMode        | boolean                                | ❌  | 是否生成树形路由 |
+| defaultRedirect | RouteRecordRedirectOption              | ✅  | 根路径默认重定向 |
 
 ------
 
@@ -106,16 +112,16 @@ interface IOption {
 ### 基础用法
 
 ```ts
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import generateRoute from "@giszhc/generate-route-vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: generateRoute({
-    pages: import.meta.glob("@/views/**/page.ts", { eager: true }),
-    modules: import.meta.glob("@/views/**/*.vue"),
-    defaultRedirect: { name: "home" }
-  })
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: generateRoute({
+        pages: import.meta.glob("@/views/**/page.ts", {eager: true}),
+        modules: import.meta.glob("@/views/**/*.vue"),
+        defaultRedirect: {name: "home"}
+    })
 });
 
 export default router;
@@ -127,10 +133,10 @@ export default router;
 
 ```ts
 routes: generateRoute({
-  pages: import.meta.glob("@/views/**/page.ts", { eager: true }),
-  modules: import.meta.glob("@/views/**/*.vue"),
-  treeMode: true,
-  defaultRedirect: { name: "home" }
+    pages: import.meta.glob("@/views/**/page.ts", {eager: true}),
+    modules: import.meta.glob("@/views/**/*.vue"),
+    treeMode: true,
+    defaultRedirect: {name: "home"}
 })
 ```
 
@@ -147,12 +153,14 @@ routes: generateRoute({
 ### 路由名称（name）
 
 - 取组件目录名
-- 自动移除 `View`
+- 自动移除 `View|-view`
 - 自动转为小写
 
 ```ts
 HomeView → home
 UserCenterView → usercenter
+home-view → home
+user-center-view → user-center
 ```
 
 ------
@@ -160,11 +168,14 @@ UserCenterView → usercenter
 ### 路由路径（path）
 
 - 基于 `views` 目录结构生成
-- 自动移除 `View`
+- 自动移除 `View|-view`
 - 自动转为小写
 
 ```ts
-/views/userView/page.ts → /user
+/views/us
+erView / page.ts → /user
+/views/us
+er - view / page.ts → /user
 ```
 
 ------
@@ -184,9 +195,9 @@ UserCenterView → usercenter
 
 ## Tree Mode 与 Flat Mode 对比
 
-| 模式             | 行为                   |
-| ---------------- | ---------------------- |
-| treeMode = false | 所有路由同级           |
+| 模式               | 行为          |
+|------------------|-------------|
+| treeMode = false | 所有路由同级      |
 | treeMode = true  | 按目录结构生成嵌套路由 |
 
 ------
@@ -194,8 +205,8 @@ UserCenterView → usercenter
 ## 注意事项
 
 - 仅支持 Vite 的 `import.meta.glob`
-- 页面必须包含 `page.ts`
-- `page.ts` 必须使用 `default export`
+- 页面必须包含 `page.ts|page.js`
+- `page.ts|page.js` 必须使用 `default export`
 - 路由结构强依赖目录命名规范
 - 不支持运行时动态新增页面
 
