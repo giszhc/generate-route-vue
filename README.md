@@ -20,13 +20,13 @@
 
 ## 安装
 
-```ts
+```bash
 pnpm install @giszhc/generate-route-vue
 ```
 
 或
 
-```ts
+```bash
 npm install @giszhc/generate-route-vue
 ```
 
