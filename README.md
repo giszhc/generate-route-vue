@@ -15,6 +15,7 @@
 - 🧩 自动解析 `page.ts` 中的 meta 信息
 - 🔁 支持默认重定向配置
 - 🧪 完整 TypeScript 类型支持
+- 📦 支持组件自动注册
 
 ------
 
@@ -101,6 +102,35 @@ interface IOption {
 
 ------
 
+### ComponentAutoRegister(app, componentList, showLog)
+
+自动注册 Vue 组件为全局组件，支持懒加载方式导入的组件。
+
+```ts
+function ComponentAutoRegister(app: App, componentList: any, showLog?: boolean): void;
+```
+
+------
+
+### 参数说明
+
+| 参数            | 类型           | 必填 | 默认值   | 说明                 |
+|---------------|--------------|----|-------|--------------------|
+| app           | App          | ✅  | -     | Vue 应用实例          |
+| componentList | any          | ✅  | -     | 通过 `import.meta.glob` 获取的组件模块集合 |
+| showLog       | boolean      | ❌  | false | 是否在控制台输出组件导出语句列表 |
+
+------
+
+### 功能说明
+
+- 自动从文件名提取组件名（移除 `.vue` 后缀）
+- 使用 `defineAsyncComponent` 进行懒加载注册
+- 支持连字符格式文件名自动转换为驼峰格式
+- 可选输出组件导出语句，方便批量导出
+
+------
+
 ## 使用示例
 
 ### 基础用法
@@ -119,6 +149,43 @@ const router = createRouter({
 });
 
 export default router;
+```
+
+------
+
+### 组件自动注册用法
+
+#### 基础用法
+
+```ts
+import { createApp } from "vue";
+import { ComponentAutoRegister } from "@giszhc/generate-route-vue";
+import App from "./App.vue";
+
+const app = createApp(App);
+
+// 自动注册 components 目录下的所有组件
+const components = import.meta.glob("@/components/**/*.vue");
+ComponentAutoRegister(app, components);
+
+app.mount("#app");
+```
+
+#### 关闭日志输出
+
+```ts
+// 第三个参数设为 false，不输出组件导出语句
+ComponentAutoRegister(app, components, false);
+```
+
+#### 组件命名规则
+
+组件文件名会自动转换为全局组件名：
+
+```ts
+my-component.vue → MyComponent
+user-info.vue → UserInfo
+home-view.vue → HomeView
 ```
 
 ------
@@ -166,10 +233,8 @@ user-center-view → user-center
 - 自动转为小写
 
 ```ts
-/views/us
-erView / page.ts → /user
-/views/us
-er - view / page.ts → /user
+/views/userView / page.ts → /user
+/views/user-view / page.ts → /user
 ```
 
 ------
