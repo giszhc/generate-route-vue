@@ -43,7 +43,7 @@ npm install @giszhc/generate-route-vue
 
 ## 页面结构约定(推荐)
 
-```ts
+```shell
 src / views /
 ├─ HomeView /
 │  ├─ HomeView.vue
@@ -182,7 +182,7 @@ ComponentAutoRegister(app, components, false);
 
 组件文件名会自动转换为全局组件名：
 
-```ts
+```shell
 my-component.vue → MyComponent
 user-info.vue → UserInfo
 home-view.vue → HomeView
@@ -217,7 +217,7 @@ routes: generateRoute({
 - 自动移除 `View|-view`
 - 自动转为小写
 
-```ts
+```shell
 HomeView → home
 UserCenterView → usercenter
 home-view → home
@@ -232,7 +232,7 @@ user-center-view → user-center
 - 自动移除 `View|-view`
 - 自动转为小写
 
-```ts
+```shell
 /views/userView / page.ts → /user
 /views/user-view / page.ts → /user
 ```
