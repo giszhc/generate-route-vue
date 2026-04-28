@@ -146,12 +146,12 @@ const generateRename = (str: string) => {
  * @param options.delay - 懒加载延迟时间（毫秒），控制显示加载状态前的等待时间，默认为 200
  * @param options.timeout - 加载超时时间（毫秒），超过此时间将触发错误处理，默认为 10000
  */
-export const registerComponents = (app: App, componentList: any, options: {
+export const registerComponents = (app: App, componentList: any, options?: {
     showLog?: boolean
     delay?: number
     timeout?: number
 }) => {
-    const {showLog = false, delay = 200, timeout = 10000} = options
+    const {showLog = false, delay = 200, timeout = 10000} = options||{}
     const comList = []
     for (const fileName in componentList) {
         if (Object.hasOwn(componentList, fileName)) {
