@@ -141,27 +141,43 @@ const generateRename = (str: string) => {
  * 组件自动注册器 - 将组件列表中的组件自动注册为 Vue 应用的全局组件
  * @param app - Vue 应用实例
  * @param componentList - 通过 import.meta.glob 获取的组件模块集合
- * @param showLog - 是否在控制台输出组件导出语句列表，默认为 false
+ * @param options - 配置选项
+ * @param options.showLog - 是否在控制台输出组件导出语句列表，默认为 false
+ * @param options.delay - 懒加载延迟时间（毫秒），控制显示加载状态前的等待时间，默认为 200
+ * @param options.timeout - 加载超时时间（毫秒），超过此时间将触发错误处理，默认为 10000
  */
-export const ComponentAutoRegister = (app: App, componentList: any, showLog: boolean = false) => {
+export const registerComponents = (app: App, componentList: any, options: {
+    showLog?: boolean
+    delay?: number
+    timeout?: number
+}) => {
+    const {showLog = false, delay = 200, timeout = 10000} = options
     const comList = []
     for (const fileName in componentList) {
         if (Object.hasOwn(componentList, fileName)) {
             const split = fileName.split("/")
             const componentName = split[split.length - 1].replace(".vue", "")
-            const componentConfig = componentList[fileName]
-            // 不能直接引入，vue3使用的是懒加载，参数是一个异步函数
-            app.component(componentName, defineAsyncComponent(componentConfig))
 
             const name = capitalizeFirstLetter(generateRename(componentName))
-            // @ts-ignore
+            const loader = componentList[fileName]
+            // 不能直接引入，vue3使用的是懒加载，参数是一个异步函数
+            app.component(
+                name,
+                defineAsyncComponent({
+                    loader,
+                    delay: delay,
+                    timeout: timeout,
+                    onError(_, retry, fall, attempts) {
+                        if (attempts <= 3) retry()
+                        else fall()
+                    }
+                })
+            )
             comList.push(`export {default as ${name} from '${fileName}'`)
         }
     }
 
-    if (showLog) {
-        console.log(comList)
-    }
+    if (showLog) console.log(comList)
 }
 
 export default generateRoute;

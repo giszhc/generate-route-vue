@@ -102,12 +102,16 @@ interface IOption {
 
 ------
 
-### ComponentAutoRegister(app, componentList, showLog)
+### registerComponents(app, componentList, options)
 
 自动注册 Vue 组件为全局组件，支持懒加载方式导入的组件。
 
 ```ts
-function ComponentAutoRegister(app: App, componentList: any, showLog?: boolean): void;
+function registerComponents(app: App, componentList: any, options?: {
+    showLog?: boolean
+    delay?: number
+    timeout?: number
+}): void;
 ```
 
 ------
@@ -118,7 +122,15 @@ function ComponentAutoRegister(app: App, componentList: any, showLog?: boolean):
 |---------------|--------------|----|-------|--------------------|
 | app           | App          | ✅  | -     | Vue 应用实例          |
 | componentList | any          | ✅  | -     | 通过 `import.meta.glob` 获取的组件模块集合 |
-| showLog       | boolean      | ❌  | false | 是否在控制台输出组件导出语句列表 |
+| options       | object       | ❌  | {}    | 配置选项对象，包含 showLog、delay、timeout |
+
+#### options 配置项
+
+| 参数      | 类型      | 必填 | 默认值   | 说明                 |
+|-----------|-----------|----|---------|----------------------|
+| showLog   | boolean   | ❌  | false   | 是否在控制台输出组件导出语句列表 |
+| delay     | number    | ❌  | 200     | 懒加载延迟时间（毫秒）     |
+| timeout   | number    | ❌  | 10000   | 加载超时时间（毫秒）     |
 
 ------
 
@@ -159,23 +171,27 @@ export default router;
 
 ```ts
 import { createApp } from "vue";
-import { ComponentAutoRegister } from "@giszhc/generate-route-vue";
+import { registerComponents } from "@giszhc/generate-route-vue";
 import App from "./App.vue";
 
 const app = createApp(App);
 
 // 自动注册 components 目录下的所有组件
 const components = import.meta.glob("@/components/**/*.vue");
-ComponentAutoRegister(app, components);
+registerComponents(app, components);
 
 app.mount("#app");
 ```
 
-#### 关闭日志输出
+#### 自定义配置
 
 ```ts
-// 第三个参数设为 false，不输出组件导出语句
-ComponentAutoRegister(app, components, false);
+// 开启日志并自定义延迟和超时时间
+registerComponents(app, components, {
+    showLog: true,
+    delay: 300,
+    timeout: 5000
+});
 ```
 
 #### 组件命名规则
